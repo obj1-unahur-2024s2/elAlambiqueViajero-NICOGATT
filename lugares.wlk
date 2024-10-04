@@ -2,48 +2,79 @@ import alambique.*
 import vehiculo.*
 
 object paris {
-  var property combustibleMinimo = 100
+  const property combustibleMinimo = 1000
+  const kmsTotales = 600
   
   method recuerdo() = "Llavero de la torre eiffel"
   
-  method suficienteCombustible(
-    unVehiculo
-  ) = combustibleMinimo <= unVehiculo.combustible()
+  method restriccion() = combustibleMinimo < luke.auto().consumirCombustible(kmsTotales)
+
 }
 
 object buenosAires {
-  const property presidentesConYerba = ["Alberto", "Oriana sabatini", "Peron"]
-  var property presidenteActual = "Milei"
+  const property combustibleMinimo = 500
+  var property presidenteActual = milei
+  const kmsPorHora = 100
   
-  method recuerdo() = if (presidentesConYerba.contains(presidenteActual))
-                        "Mate con yerba"
-                      else "Mate"
+  method recuerdo() = presidenteActual.mate()
+  
+  method restriccion() = kmsPorHora < luke.auto().rapido()
+
+}
+
+object milei {
+  method mate() = "Mate"
+}
+
+object alberto {
+  method mate() = "Mate con yerba"
+}
+
+object orianaSabatini {
+  method mate() = "Mate con yerba"
+}
+
+object macri {
+  method mate() = "Mate"
 }
 
 object bagdad {
-  // var recuerdo= ""
+  var property unAnio = 1990
+  const recuerdos = [cerveza, bidonConPetroleoCrudo, armasDestruccionMasiva]
+  const property combustibleMinimo = 1500
+  
+  method recuerdo() = recuerdos.find(
+    { elemento => elemento.seVendeEnElAnio(unAnio) }
+  )
+  
+  method restriccion() {
+    
+  }
 
-  // method recuerdo(unAño) =
-  //     (if((unAño % 10) == 3) {
-  //       recuerdo =  "Cerveza"
-  //     } else if(unAño.even()) {
-  //       recuerdo = "Bidon con petroleo crudo"
-  //     } else {
-  //       recuerdo = "Armas de destruccion masiva"
-  //     })
-  // method recuerdo() = recuerdo
 }
 
 object lasVegas {
-  const property recuerdo = homenaje
-}
+  var property homenajeado = paris
+  const property combustibleMinimo = 800
 
-object homenaje {
-  var recuerdo = ""
-  
-  method recuerdo() = recuerdo
-  
-  method recuerdo(unHomenaje) {
-    recuerdo = unHomenaje.recuerdo()
+  method recuerdo() = homenajeado.recuerdo()
+
+  method restriccion() = homenajeado.restriccion()
+
+  method viaje() {
+    alambiqueVeloz.consumirCombustible(combustibleMinimo)
   }
 }
+
+object cerveza {
+  method seVendeEnElAnio(unAnio) = (unAnio % 10) == 3
+}
+
+object bidonConPetroleoCrudo {
+  method seVendeEnElAnio(unAnio) = unAnio.even()
+}
+
+object armasDestruccionMasiva {
+  method seVendeEnElAnio(unAnio) = unAnio.odd() and ((unAnio % 10) != 3)
+}
+
